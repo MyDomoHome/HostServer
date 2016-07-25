@@ -32,7 +32,7 @@ select ynDk in "Yes" "No"; do
 				mkdir -p $dirtvar
 				echo '$partvar       $dirtvar                    auto    defaults        0 0' >> /etc/fstab 
 				mount -a
-				#break;;
+				break;;
         No ) break;;
     esac
 done 
@@ -86,14 +86,14 @@ usermod -aG docker $uservar
 
 
 
-docker load --input
+#docker load --input
 
-#docker run --restart=always --name Samba -d -p 137:137 -p 139:139 -p 445:445 -v /mnt:/mnt -d dperson/samba -n -s "public;/mnt;yes;no;yes" -w "<workgroup>"
-#docker run --restart=always --name MySQL -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$passvar -v /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d -v /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql -d mysql
-#docker run --restart=always --name Transmission -p 12345:12345 -p 12345:12345/udp -p 9091:9091 -e ADMIN_PASS=$passvar -v /mnt/1TO/Download:/var/lib/transmission-daemon/downloads -d zaraki673/docker-transmission
-#docker run --restart=always --name SickRage -p 8081:8081 -h SickRage -v /mnt/3TO/DockerData/SickRage:/config -v /mnt/1TO/Download:/downloads -v /mnt/1TO/Multimedia/SeriesTV:/tv -v /etc/localtime:/etc/localtime:ro -d sickrage/sickrage
-#docker run --restart=always -d --name tvheadend --privileged=true -v /mnt/3TO/DockerData/tvheadend/config:/config -v /mnt/3TO/DockerData/tvheadend/recordings:/recordings -v /etc/localtime:/etc/localtime:ro -p 9981:9981 -p 9982:9982 -p 5500:5500 tobbenb/tvheadend-unstable
-#docker run --restart=always -d --name="Zoneminder-1.29" --privileged=true -v /mnt/3TO/DockerData/ZM/config:/config:rw -v /etc/localtime:/etc/localtime:ro -p 8082:80 aptalca/zoneminder-1.29
+docker run --restart=always --name Samba -d -p 137:137 -p 139:139 -p 445:445 -v /mnt:/mnt -d dperson/samba -n -s "public;/mnt;yes;no;yes" -w "<workgroup>"
+docker run --restart=always --name MySQL -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$passvar -v /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d -v /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql -d mysql
+docker run --restart=always --name Transmission -p 12345:12345 -p 12345:12345/udp -p 9091:9091 -e ADMIN_PASS=$passvar -v /mnt/1TO/Download:/var/lib/transmission-daemon/downloads -d zaraki673/docker-transmission
+docker run --restart=always --name SickRage -p 8081:8081 -h SickRage -v /mnt/3TO/DockerData/SickRage:/config -v /mnt/1TO/Download:/downloads -v /mnt/1TO/Multimedia/SeriesTV:/tv -v /etc/localtime:/etc/localtime:ro -d sickrage/sickrage
+docker run --restart=always -d --name tvheadend --privileged=true -v /mnt/3TO/DockerData/tvheadend/config:/config -v /mnt/3TO/DockerData/tvheadend/recordings:/recordings -v /etc/localtime:/etc/localtime:ro -p 9981:9981 -p 9982:9982 -p 5500:5500 tobbenb/tvheadend-unstable
+docker run --restart=always -d --name="Zoneminder" --privileged=true -v /mnt/3TO/DockerData/ZM/config:/config:rw -v /etc/localtime:/etc/localtime:ro -p 8082:80 aptalca/zoneminder-1.29
 #docker run --restart=always -d -p 8080:8080 --name=Domoticz -v /mnt/3TO/DockerData/Domoticz/config:/config -v /etc/localtime:/etc/localtime:ro --device=<device_id> sdesbure/domoticz
 
 ##docker run -v /mnt/3TO/DockerData/OpenVPN:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://vpn.mydomohome.eu

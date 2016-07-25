@@ -1,7 +1,7 @@
 version: '2'
 services:
  nginx-proxy:
-    image: jwilder/nginx-proxy
+    image: mydomohome/docker-proxy
     container_name: nginx-proxy
     restart: always
     ports:
@@ -13,7 +13,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
  samba:
-    image: dperson/samba
+    image: mydomohome/docker-samba
     container_name: Samba
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
     command: -n -s "public;/mnt;yes;no;yes" -w "<workgroup>"
     
  mysql:
-    image: mysql
+    image: mydomohome/docker-mysql
     container_name: MySQL
     restart: always
     ports:
@@ -34,10 +34,10 @@ services:
       - /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d
       - /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=RebOOt007
+      - MYSQL_ROOT_PASSWORD=password
       
  transmission:
-    image : zaraki673/docker-transmission
+    image : mydomohome/docker-transmission
     container_name: transmission
     restart: always
     ports:
@@ -48,7 +48,7 @@ services:
       - /mnt/1TO/Download:/var/lib/transmission-daemon/downloads
       - /mnt/1TO/Download/incomplete:/var/lib/transmission-daemon/downloads/incomplete
     environment:
-      - ADMIN_PASS=RebOOt007
+      - ADMIN_PASS=password
       - VIRTUAL_HOST=dl.mydomohome.eu
       - VIRTUAL_PORT=9091
     
@@ -68,7 +68,7 @@ services:
       - VIRTUAL_PORT=8081
     
  tvheadend:
-    image: tobbenb/tvheadend-unstable
+    image: mydomohome/docker-tvheadend
     container_name: tvheadend
     restart: always
     ports:
@@ -84,7 +84,7 @@ services:
       - VIRTUAL_PORT=9981
    
  zoneminder:
-    image: aptalca/zoneminder-1.29
+    image: mydomohome/docker-zoneminder
     container_name: Zoneminder
     privileged: true
     restart: always
