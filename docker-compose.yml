@@ -1,0 +1,98 @@
+version: '2'
+services:
+ nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /mnt/3TO/DockerData/Proxy/certs:/etc/nginx/certs
+      - /mnt/3TO/DockerData/Proxy/conf.d:/etc/nginx/conf.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+ samba:
+    image: dperson/samba
+    container_name: Samba
+    restart: always
+    ports:
+      - "137:137"
+      - "139:139"
+      - "445:445"
+    volumes:
+      - /mnt:/mnt
+    command: -n -s "public;/mnt;yes;no;yes" -w "<workgroup>"
+    
+ mysql:
+    image: mysql
+    container_name: MySQL
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d
+      - /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=RebOOt007
+      
+ transmission:
+    image : zaraki673/docker-transmission
+    container_name: transmission
+    restart: always
+    ports:
+      - "12345:12345"
+      - "12345:12345/udp"
+      - "9091:9091"
+    volumes:
+      - /mnt/1TO/Download:/var/lib/transmission-daemon/downloads
+      - /mnt/1TO/Download/incomplete:/var/lib/transmission-daemon/downloads/incomplete
+    environment:
+      - ADMIN_PASS=RebOOt007
+      - VIRTUAL_HOST=dl.mydomohome.eu
+      - VIRTUAL_PORT=9091
+    
+ sickrage:
+    image: sickrage/sickrage
+    container_name: SickRage
+    restart: always
+    ports: 
+      - "8081:8081"
+    volumes:
+      - /mnt/3TO/DockerData/SickRage:/config
+      - /mnt/1TO/Download:/downloads
+      - /mnt/1TO/Multimedia/SeriesTV:/tv
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - VIRTUAL_HOST=series.mydomohome.eu
+      - VIRTUAL_PORT=8081
+    
+ tvheadend:
+    image: tobbenb/tvheadend-unstable
+    container_name: tvheadend
+    restart: always
+    ports:
+      - "9981:9981"
+      - "9982:9982"
+      - "5500:5500"
+    volumes:
+      - /mnt/3TO/DockerData/tvheadend/config:/config
+      - /mnt/3TO/DockerData/tvheadend/recordings:/recordings
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - VIRTUAL_HOST=tv.mydomohome.eu
+      - VIRTUAL_PORT=9981
+   
+ zoneminder:
+    image: aptalca/zoneminder-1.29
+    container_name: Zoneminder
+    privileged: true
+    restart: always
+    ports:
+      - "8082:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/3TO/DockerData/ZM/config:/config:rw
+    environment:
+      - VIRTUAL_HOST=zm.mydomohome.eu
+      - VIRTUAL_PORT=8082
