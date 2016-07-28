@@ -10,6 +10,13 @@ echo "Select your username :"
 read -p 'Username: ' uservar
 echo "Select your password :"
 read -sp 'Password: ' passvar
+
+echo "Select Your IP :"
+read -p 'IP ADD: ' ipvar
+read -p 'Mask: ' ipmaskvar
+read -p 'Gateway: ' ipgatewayvar
+read -p 'DNS1: ' ipdns1var
+read -p 'DNS2: ' ipdns2var
 #
 echo  "$servar.$domvar" > /etc/hostname
 echo
@@ -44,27 +51,26 @@ done
 NicName=$(dmesg | grep "NIC Link")
 NicName=${NicName#*: }
 NicName=${NicName% NIC*}
-NicUID=uuidgen $NicName
+NicUID=$(uuidgen $NicName)
 #
 #
-cat << 'EOF' > /etc/sysconfig/network-scripts/ifcfg-br0
-TYPE=Bridge
-BOOTPROTO=none
-DEVICE=br0
-ONBOOT=yes
-IPADDR=192.168.10.250
-NETMASK=255.255.255.0
-GATEWAY=192.168.10.254
-DNS1=8.8.8.8
-EOF
+echo "TYPE=Bridge" > /etc/sysconfig/network-scripts/ifcfg-br0
+echo "BOOTPROTO=none" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "DEVICE=br0" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "ONBOOT=yes" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "IPADDR=$ipvar" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "NETMASK=$ipmaskvar" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "GATEWAY=$ipgatewayvar" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "DNS1=$ipdns1var" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "DNS2=$ipdns2var" >> /etc/sysconfig/network-scripts/ifcfg-br0
 #
 #mv /etc/sysconfig/network-scripts/ifcfg-$NicName /etc/sysconfig/network-scripts/ifcfg-$NicName.bak
-echo "HWADDR=E8:39:35:EE:1E:9B" > /etc/sysconfig/network-scripts/ifcfg-$NicName
-echo "TYPE=Ethernet" >> /etc/sysconfig/network-scripts/ifcfg-$NicName
-echo "NAME="eth0"" >> /etc/sysconfig/network-scripts/ifcfg-$NicName
-echo "UUID=$NicUID" >> /etc/sysconfig/network-scripts/ifcfg-$NicName
-echo "ONBOOT=yes" >> /etc/sysconfig/network-scripts/ifcfg-$NicName
-echo "BRIDGE=br0" >> /etc/sysconfig/network-scripts/ifcfg-$NicName
+echo "HWADDR=E8:39:35:EE:1E:9B" > "/etc/sysconfig/network-scripts/ifcfg-$NicName"
+echo "TYPE=Ethernet" >> "/etc/sysconfig/network-scripts/ifcfg-$NicName"
+echo 'NAME="eth0"' >> "/etc/sysconfig/network-scripts/ifcfg-$NicName"
+echo "UUID=$NicUID" >> "/etc/sysconfig/network-scripts/ifcfg-$NicName"
+echo "ONBOOT=yes" >> "/etc/sysconfig/network-scripts/ifcfg-$NicName"
+echo "BRIDGE=br0" >> "/etc/sysconfig/network-scripts/ifcfg-$NicName"
 #
 #desactivation de la securité selinux pour kvm
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
@@ -110,5 +116,5 @@ sed -i 's/#vnc_listen/vnc_listen/g' /etc/libvirt/qemu.conf
 #
 #
 #SSH
-sed -i 's/#PermitRootLogin yes/PermitRootLogin no\nAllowUsers $uservar/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no\nAllowUsers '$uservar'/g' /etc/ssh/sshd_config
 
