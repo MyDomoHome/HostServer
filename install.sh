@@ -80,11 +80,11 @@ yum update -y
 curl -fsSL https://get.docker.com/ | sh
 systemctl enable docker.service
 systemctl start docker.service
-yum install epel-release -y
-yum install -y python-pip -y
-pip install docker-compose
-yum upgrade python* -y
-pip install --upgrade backports.ssl_match_hostname
+#yum install epel-release -y
+#yum install -y python-pip -y
+#pip install docker-compose
+#yum upgrade python* -y
+#pip install --upgrade backports.ssl_match_hostname
 #docker-compose up
 usermod -aG docker $uservar
 #
