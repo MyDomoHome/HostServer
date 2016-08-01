@@ -80,25 +80,28 @@ yum update -y
 curl -fsSL https://get.docker.com/ | sh
 systemctl enable docker.service
 systemctl start docker.service
-#yum install epel-release -y
-#yum install -y python-pip -y
-#pip install docker-compose
-#yum upgrade python* -y
-#pip install --upgrade backports.ssl_match_hostname
-#docker-compose up
 usermod -aG docker $uservar
+yum install epel-release -y
+yum install -y python-pip -y
+pip install docker-compose
+yum upgrade python* -y
+pip install --upgrade backports.ssl_match_hostname
+
+curl https://raw.githubusercontent.com/MyDomoHome/HostServer/master/docker-compose.yml > docker-compose.yml
+docker-compose up
+
 #
 #
 #
 #docker load --input
 #
-docker run --restart=always -d --name Samba -p 137:137 -p 139:139 -p 445:445 -v /mnt:/mnt -d mydomohome/docker-samba -n -s "public;/mnt;yes;no;yes" -w "<$domvar>"
-docker run --restart=always -d --name MySQL -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$passvar -v /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d -v /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql mydomohome/docker-mysql
-docker run --restart=always -d --name Transmission -p 12345:12345 -p 12345:12345/udp -p 9091:9091 -e ADMIN_PASS=$passvar -v /mnt/1TO/Download:/var/lib/transmission-daemon/downloads mydomohome/docker-transmission
-docker run --restart=always -d --name SickRage -p 8081:8081 -h SickRage -v /mnt/3TO/DockerData/SickRage:/config -v /mnt/1TO/Download:/downloads -v /mnt/1TO/Multimedia/SeriesTV:/tv -v /etc/localtime:/etc/localtime:ro mydomohome/docker-sickrage
-docker run --restart=always -d --name tvheadend -p 9981:9981 -p 9982:9982 -p 5500:5500 --privileged=true -v /mnt/3TO/DockerData/tvheadend/config:/config -v /mnt/3TO/DockerData/tvheadend/recordings:/recordings -v /etc/localtime:/etc/localtime:ro mydomohome/docker-tvheadend
-docker run --restart=always -d --name=Zoneminder -p 8082:80 --privileged=true -v /mnt/3TO/DockerData/ZM/config:/config:rw -v /etc/localtime:/etc/localtime:ro mydomohome/docker-zoneminder
-#docker run --restart=always -d -p 8080:8080 --name=Domoticz -v /mnt/3TO/DockerData/Domoticz/config:/config -v /etc/localtime:/etc/localtime:ro --device=<device_id> sdesbure/domoticz
+#docker run --restart=always -d --name Samba -p 137:137 -p 139:139 -p 445:445 -v /mnt:/mnt -d mydomohome/docker-samba -n -s "public;/mnt;yes;no;yes" -w "<$domvar>"
+#docker run --restart=always -d --name MySQL -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$passvar -v /mnt/3TO/DockerData/MySQL/config:/etc/mysql/conf.d -v /mnt/3TO/DockerData/MySQL/Data:/var/lib/mysql mydomohome/docker-mysql
+#docker run --restart=always -d --name Transmission -p 12345:12345 -p 12345:12345/udp -p 9091:9091 -e ADMIN_PASS=$passvar -v /mnt/1TO/Download:/var/lib/transmission-daemon/downloads mydomohome/docker-transmission
+#docker run --restart=always -d --name SickRage -p 8081:8081 -h SickRage -v /mnt/3TO/DockerData/SickRage:/config -v /mnt/1TO/Download:/downloads -v /mnt/1TO/Multimedia/SeriesTV:/tv -v /etc/localtime:/etc/localtime:ro mydomohome/docker-sickrage
+#docker run --restart=always -d --name tvheadend -p 9981:9981 -p 9982:9982 -p 5500:5500 --privileged=true -v /mnt/3TO/DockerData/tvheadend/config:/config -v /mnt/3TO/DockerData/tvheadend/recordings:/recordings -v /etc/localtime:/etc/localtime:ro mydomohome/docker-tvheadend
+#docker run --restart=always -d --name=Zoneminder -p 8082:80 --privileged=true -v /mnt/3TO/DockerData/ZM/config:/config:rw -v /etc/localtime:/etc/localtime:ro mydomohome/docker-zoneminder
+##docker run --restart=always -d -p 8080:8080 --name=Domoticz -v /mnt/3TO/DockerData/Domoticz/config:/config -v /etc/localtime:/etc/localtime:ro --device=<device_id> sdesbure/domoticz
 #
 ##docker run -v /mnt/3TO/DockerData/OpenVPN:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://vpn.mydomohome.eu
 ##docker run -v /mnt/3TO/DockerData/OpenVPN:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki
