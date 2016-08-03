@@ -61,17 +61,20 @@ cat > $CENTOS_CUSTOM_PATH/ks.cfg << KSEOF
 # Tell anaconda we're doing a fresh install and not an upgrade
 install
 url --url=http://mirror.centos.org/centos/7.2.1511/os/x86_64/
+
+sshpw --username=root toor --plaintext
+
 text
 reboot --eject
 # Use the cdrom for the package install
 cdrom
-lang en_US.UTF-8
+lang fr_FR.UTF-8
 #keyboard $LAYOUT XXX FIXME
 keyboard --vckeymap=fr --xlayouts=fr
 
 skipx
 # You'll need a DHCP server on the network for the new install to be reachable via SSH
-network --device eth0 --bootproto dhcp --onboot=yes
+network --bootproto dhcp --onboot=yes
 # Set the root password below !! Remember to change this once the install has completed !!
 rootpw --plaintext toor
 # Enable iptables, but allow SSH from anywhere
@@ -82,14 +85,11 @@ selinux --enforcing
 timezone --utc Europe/Paris
 logging --level=debug
 # Storage partitioning and formatting is below. We use LVM here.
-bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
-zerombr
+# System bootloader configuration
+bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=sda
+autopart --type=lvm
+# Partition clearing information
 clearpart --all --initlabel
-part /boot --fstype ext4 --size=250
-part pv.2 --size=3000 --grow
-volgroup VolGroup00 --pesize=32768 pv.2
-logvol / --fstype ext4 --name=LogVol00 --vgname=VolGroup00 --size=1024 --grow
-logvol swap --fstype swap --name=LogVol01 --vgname=VolGroup00 --size=256 --grow --maxsize=512
 # Defines the repo we created
 repo --name="CentOS7" --baseurl=file:///mnt/source --cost=100
 
@@ -124,7 +124,7 @@ set -x -v
 exec 1>/root/kickstart-stage2.log 2>&1
 
 cd /root/
-./install.sh
+cp /mnt/sysimage/root/install.sh /root/install.sh
 
 %end
 
@@ -134,7 +134,7 @@ KSEOF
 
 sed -i -e '
 s,timeout 600,timeout 60,
-s,append initrd=initrd.img.*$,append initrd=initrd.img inst.stage2=hd:LABEL=CentOS7 ks=cdrom:/ks.cfg net.ifnames=0 biosdevname=0 initcall_blacklist=clocksource_done_booting,' $CENTOS_CUSTOM_PATH/isolinux/isolinux.cfg 
+s,append initrd=initrd.img.*$,append initrd=initrd.img inst.sshd inst.stage2=hd:LABEL=CentOS7 ks=cdrom:/ks.cfg net.ifnames=0 biosdevname=0 initcall_blacklist=clocksource_done_booting,' $CENTOS_CUSTOM_PATH/isolinux/isolinux.cfg 
 
 
 cd $CENTOS_CUSTOM_PATH
