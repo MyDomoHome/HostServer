@@ -119,4 +119,4 @@ docker run --restart=always -d --name Zoneminder -e VIRTUAL_HOST=zm.mydomohome.e
 #SSH
 sed -i 's/#PermitRootLogin yes/PermitRootLogin no\nAllowUsers '$uservar'/g' /etc/ssh/sshd_config
 
-chkconfig /root/install.sh off
+
